@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom'
-import { getArea } from '../data/areas'
 import { startingPrice } from '../data/providers'
 import { money } from '../utils/schedule'
+import { useLang } from '../i18n/LanguageContext'
+import { useData } from '../i18n/useData'
 import Icon from './Icon'
 import Rating from './Rating'
 
 export default function ProviderCard({ provider }) {
+  const { t } = useLang()
+  const { getArea } = useData()
   const area = getArea(provider.area)
   const isGen = provider.type === 'generator'
 
@@ -21,7 +24,7 @@ export default function ProviderCard({ provider }) {
           }`}
         >
           <Icon name={isGen ? 'plug' : 'sun'} className="h-3.5 w-3.5" />
-          {isGen ? 'Generator' : 'Solar installer'}
+          {isGen ? t('card.generator') : t('card.solar')}
         </span>
         <Rating value={provider.rating} />
       </div>
@@ -35,11 +38,11 @@ export default function ProviderCard({ provider }) {
 
       <div className="mt-auto flex items-end justify-between border-t border-line pt-4">
         <div>
-          <p className="text-xs text-mute">{isGen ? 'From, per month' : 'Packages from'}</p>
+          <p className="text-xs text-mute">{isGen ? t('card.fromMonth') : t('card.packagesFrom')}</p>
           <p className="text-xl font-bold">{money(startingPrice(provider))}</p>
         </div>
-        <p className="text-right text-xs text-mute">
-          {isGen ? `${provider.hoursPerDay} h/day supply` : `${provider.packages.length} packages`}
+        <p className="text-end text-xs text-mute">
+          {isGen ? t('card.supply', { n: provider.hoursPerDay }) : t('card.packages', { n: provider.packages.length })}
         </p>
       </div>
     </Link>

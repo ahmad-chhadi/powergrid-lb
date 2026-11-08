@@ -2,7 +2,7 @@
 
 /* Design tokens: colours come from the three power sources a Lebanese home lives with */
 @theme {
-  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Archivo", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
 
   --color-night: #0f1c2e;
   --color-night-2: #182a42;
@@ -33,6 +33,15 @@
   }
   p {
     text-wrap: pretty;
+  }
+  /* Arabic letters must stay connected, so no negative letter spacing in RTL */
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3 {
+    letter-spacing: 0;
+  }
+  [dir="rtl"] body {
+    line-height: 1.7;
   }
   :focus-visible {
     outline: 3px solid var(--color-sun);

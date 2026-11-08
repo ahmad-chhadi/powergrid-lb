@@ -1,17 +1,19 @@
 import { Link } from 'react-router-dom'
 import SupplyStrip from '../components/SupplyStrip'
+import { useLang } from '../i18n/LanguageContext'
 
 export default function NotFound() {
+  const { t } = useLang()
   return (
     <section className="container-page py-24">
       <div className="mx-auto max-w-xl text-center">
         <p className="text-7xl font-extrabold" style={{ fontStretch: '125%' }}>404</p>
-        <h1 className="mt-4 text-3xl font-extrabold">This page is in a power cut</h1>
-        <p className="mt-3 text-mute">The address doesn’t match any page. Head back home and pick up from there.</p>
+        <h1 className="mt-4 text-3xl font-extrabold">{t('notFound.title')}</h1>
+        <p className="mt-3 text-mute">{t('notFound.text')}</p>
         <div className="mt-10">
           <SupplyStrip schedule="------------------------" now={null} showTotals={false} animate={false} />
         </div>
-        <Link to="/" className="btn-ink mt-10">Back to home</Link>
+        <Link to="/" className="btn-ink mt-10">{t('notFound.back')}</Link>
       </div>
     </section>
   )

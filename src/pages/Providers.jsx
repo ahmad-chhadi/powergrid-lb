@@ -3,22 +3,22 @@ import { useSearchParams } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import ProviderCard from '../components/ProviderCard'
 import Icon from '../components/Icon'
-import { areas } from '../data/areas'
-import { providers, startingPrice } from '../data/providers'
+import { startingPrice } from '../data/providers'
+import { useLang } from '../i18n/LanguageContext'
+import { useData } from '../i18n/useData'
 
-const types = [
-  { value: 'all', label: 'All' },
-  { value: 'generator', label: 'Generators' },
-  { value: 'solar', label: 'Solar installers' },
-]
+const types = ['all', 'generator', 'solar']
 
 const sorts = {
-  rating: { label: 'Highest rated', fn: (a, b) => b.rating - a.rating },
-  price: { label: 'Lowest price', fn: (a, b) => startingPrice(a) - startingPrice(b) },
-  hours: { label: 'Most hours per day', fn: (a, b) => b.hoursPerDay - a.hoursPerDay },
+  rating: (a, b) => b.rating - a.rating,
+  price: (a, b) => startingPrice(a) - startingPrice(b),
+  hours: (a, b) => b.hoursPerDay - a.hoursPerDay,
 }
 
 export default function Providers() {
+  const { t } = useLang()
+  const { areas, providers } = useData()
+
   // Filters live in the URL (?q=&area=&type=&sort=) so a filtered list can be shared or bookmarked.
   const [params, setParams] = useSearchParams()
   const q = params.get('q') ?? ''
@@ -38,65 +38,62 @@ export default function Providers() {
     return providers
       .filter((p) => area === 'all' || p.area === area)
       .filter((p) => type === 'all' || p.type === type)
-      .filter((p) => !text || p.name.toLowerCase().includes(text) || p.summary.toLowerCase().includes(text))
-      .sort(sorts[sort]?.fn ?? sorts.rating.fn)
-  }, [q, area, type, sort])
+      .filter((p) => !text || p.search.includes(text))
+      .sort(sorts[sort] ?? sorts.rating)
+  }, [providers, q, area, type, sort])
 
   return (
     <>
-      <PageHeader
-        title="Find a provider"
-        intro="Generator networks and solar installers across Lebanon, with plans, prices and subscriber ratings."
-      />
+      <PageHeader title={t('providers.title')} intro={t('providers.intro')} />
 
       <section className="container-page py-10">
         {/* Filters */}
         <div className="grid gap-4 rounded-lg border border-line bg-white p-4 sm:p-5 lg:grid-cols-[1.5fr_1fr_1fr]">
           <div>
-            <label htmlFor="q" className="label">Search</label>
+            <label htmlFor="q" className="label">{t('providers.search')}</label>
             <div className="relative">
-              <Icon name="search" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mute" />
+              <Icon name="search" className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mute" />
               <input
                 id="q"
                 type="search"
                 value={q}
                 onChange={(e) => update('q', e.target.value, '')}
-                placeholder="Provider name or keyword"
-                className="field pl-9"
+                placeholder={t('providers.searchPlaceholder')}
+                className="field ps-9"
               />
             </div>
           </div>
           <div>
-            <label htmlFor="area" className="label">Area</label>
+            <label htmlFor="area" className="label">{t('providers.area')}</label>
             <select id="area" value={area} onChange={(e) => update('area', e.target.value, 'all')} className="field">
-              <option value="all">All areas</option>
+              <option value="all">{t('providers.allAreas')}</option>
               {areas.map((a) => (
                 <option key={a.id} value={a.id}>{a.name}</option>
               ))}
             </select>
           </div>
           <div>
-            <label htmlFor="sort" className="label">Sort by</label>
+            <label htmlFor="sort" className="label">{t('providers.sortBy')}</label>
             <select id="sort" value={sort} onChange={(e) => update('sort', e.target.value, 'rating')} className="field">
-              {Object.entries(sorts).map(([k, s]) => (
-                <option key={k} value={k}>{s.label}</option>
+              {Object.keys(sorts).map((k) => (
+                <option key={k} value={k}>{t(`providers.sorts.${k}`)}</option>
               ))}
             </select>
           </div>
           <fieldset className="lg:col-span-3">
-            <legend className="sr-only">Provider type</legend>
+            <legend className="sr-only">{t('providers.type')}</legend>
             <div className="flex flex-wrap gap-2">
-              {types.map((t) => (
+              {types.map((value) => (
                 <button
-                  key={t.value}
+                  key={value}
                   type="button"
-                  onClick={() => update('type', t.value, 'all')}
-                  aria-pressed={type === t.value}
+                  onClick={() => update('type', value, 'all')}
+                  aria-pressed={type === value}
                   className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${
-                    type === t.value ? 'border-ink bg-ink text-white' : 'border-line bg-paper text-ink hover:border-ink'
+                    type === value ? 'border-ink bg-ink text-white' : 'border-line bg-paper text-ink hover:border-ink'
                   }`}
                 >
-                  {t.label}
+                  {t(`providers.types.${value}`)}
                 </button>
               ))}
             </div>
@@ -104,7 +101,7 @@ export default function Providers() {
         </div>
 
         <p className="mt-6 text-sm text-mute" aria-live="polite">
-          {results.length} {results.length === 1 ? 'provider' : 'providers'} found
+          {results.length === 1 ? t('providers.foundOne') : t('providers.found', { n: results.length })}
         </p>
 
         {results.length ? (
@@ -115,10 +112,10 @@ export default function Providers() {
           </div>
         ) : (
           <div className="mt-4 rounded-lg border border-dashed border-line bg-white px-6 py-14 text-center">
-            <h2 className="text-xl font-bold">No provider matches these filters</h2>
-            <p className="mt-2 text-mute">Try another area, or clear the search to see every provider.</p>
+            <h2 className="text-xl font-bold">{t('providers.emptyTitle')}</h2>
+            <p className="mt-2 text-mute">{t('providers.emptyText')}</p>
             <button type="button" onClick={() => setParams({})} className="btn-ink mt-6">
-              Clear filters
+              {t('providers.clear')}
             </button>
           </div>
         )}

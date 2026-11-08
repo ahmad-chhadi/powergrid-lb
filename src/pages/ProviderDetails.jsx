@@ -3,12 +3,15 @@ import { Link, useParams } from 'react-router-dom'
 import SupplyStrip from '../components/SupplyStrip'
 import Icon from '../components/Icon'
 import Rating from '../components/Rating'
-import { getArea } from '../data/areas'
-import { getProvider } from '../data/providers'
 import { money } from '../utils/schedule'
 import { usePower } from '../context/PowerContext'
+import { useLang } from '../i18n/LanguageContext'
+import { useData, planLabel } from '../i18n/useData'
 
 export default function ProviderDetails() {
+  const { t } = useLang()
+  const { getProvider, getArea } = useData()
+
   // the :id part of the URL decides which provider is shown
   const { id } = useParams()
   const provider = getProvider(id)
@@ -16,9 +19,9 @@ export default function ProviderDetails() {
   if (!provider) {
     return (
       <section className="container-page py-24 text-center">
-        <h1 className="text-3xl font-extrabold">This provider is not listed</h1>
-        <p className="mt-3 text-mute">The link may be outdated. Browse the full list to find another provider.</p>
-        <Link to="/providers" className="btn-ink mt-8">Back to providers</Link>
+        <h1 className="text-3xl font-extrabold">{t('details.notListedTitle')}</h1>
+        <p className="mt-3 text-mute">{t('details.notListedText')}</p>
+        <Link to="/providers" className="btn-ink mt-8">{t('details.back')}</Link>
       </section>
     )
   }
@@ -31,28 +34,28 @@ export default function ProviderDetails() {
       <section className="border-b border-line bg-white">
         <div className="container-page py-10 sm:py-14">
           <Link to="/providers" className="inline-flex items-center gap-1.5 text-sm font-medium text-mute hover:text-ink">
-            <Icon name="arrowLeft" className="h-4 w-4" />
-            All providers
+            <Icon name="arrowLeft" className="h-4 w-4 rtl:rotate-180" />
+            {t('details.all')}
           </Link>
           <div className="mt-6 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <p className={`text-sm font-semibold ${isGen ? 'text-[#8a5a12]' : 'text-[#0b6e67]'}`}>
-                {isGen ? 'Generator network' : 'Solar installer'} in {area.name}
+                {isGen ? t('details.networkIn', { area: area.name }) : t('details.installerIn', { area: area.name })}
               </p>
               <h1 className="mt-2 text-4xl font-extrabold sm:text-5xl">{provider.name}</h1>
               <p className="mt-3 max-w-2xl text-lg leading-relaxed text-mute">{provider.summary}</p>
             </div>
             <dl className="grid shrink-0 grid-cols-3 gap-6 text-sm">
               <div>
-                <dt className="text-mute">Rating</dt>
+                <dt className="text-mute">{t('details.rating')}</dt>
                 <dd className="mt-1"><Rating value={provider.rating} /></dd>
               </div>
               <div>
-                <dt className="text-mute">{isGen ? 'Supply' : 'Sun hours'}</dt>
-                <dd className="mt-1 font-semibold">{provider.hoursPerDay} h/day</dd>
+                <dt className="text-mute">{isGen ? t('details.supply') : t('details.sunHours')}</dt>
+                <dd className="mt-1 font-semibold">{t('details.hDay', { n: provider.hoursPerDay })}</dd>
               </div>
               <div>
-                <dt className="text-mute">Since</dt>
+                <dt className="text-mute">{t('details.since')}</dt>
                 <dd className="mt-1 font-semibold">{provider.since}</dd>
               </div>
             </dl>
@@ -63,7 +66,7 @@ export default function ProviderDetails() {
       <section className="container-page grid gap-10 py-12 lg:grid-cols-[1fr_380px]">
         <div className="space-y-12">
           <div>
-            <h2 className="text-2xl font-bold">What’s included</h2>
+            <h2 className="text-2xl font-bold">{t('details.included')}</h2>
             <ul className="mt-5 grid gap-3 sm:grid-cols-2">
               {provider.features.map((f) => (
                 <li key={f} className="flex items-start gap-3 rounded-md bg-white p-4">
@@ -75,19 +78,15 @@ export default function ProviderDetails() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold">Typical day in {area.name}</h2>
-            <p className="mt-2 text-mute">
-              {isGen
-                ? 'Amber hours are covered by this generator when the state grid is off.'
-                : 'Teal hours are when panels produce. A battery carries that energy into the evening.'}
-            </p>
+            <h2 className="text-2xl font-bold">{t('details.typicalDay', { area: area.name })}</h2>
+            <p className="mt-2 text-mute">{isGen ? t('details.genNote') : t('details.solarNote')}</p>
             <div className="mt-8 rounded-lg border border-line bg-white p-5">
               <SupplyStrip schedule={area.schedule} now={null} animate={false} />
             </div>
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold">What subscribers say</h2>
+            <h2 className="text-2xl font-bold">{t('details.reviews')}</h2>
             <ul className="mt-5 divide-y divide-line rounded-lg border border-line bg-white">
               {provider.reviews.map((r) => (
                 <li key={r.name} className="p-5">
@@ -102,7 +101,7 @@ export default function ProviderDetails() {
           </div>
         </div>
 
-        {/* on phones the plan picker comes first; on large screens it sits on the right */}
+        {/* on phones the plan picker comes first; on large screens it sits on the side */}
         <aside className="order-first lg:order-none lg:sticky lg:top-24 lg:self-start">
           {isGen ? <GeneratorPlans provider={provider} /> : <SolarPackages provider={provider} />}
           <a
@@ -110,7 +109,7 @@ export default function ProviderDetails() {
             className="mt-4 flex items-center justify-center gap-2 text-sm font-medium text-mute hover:text-ink"
           >
             <Icon name="phone" className="h-4 w-4" />
-            {provider.phone}
+            <span dir="ltr">{provider.phone}</span>
           </a>
         </aside>
       </section>
@@ -119,18 +118,19 @@ export default function ProviderDetails() {
 }
 
 function GeneratorPlans({ provider }) {
+  const { t } = useLang()
   const { subscription, subscribe } = usePower()
   const [planIndex, setPlanIndex] = useState(1 < provider.plans.length ? 1 : 0)
   const [kwh, setKwh] = useState(150)
   const plan = provider.plans[planIndex]
-  const monthly = plan.fee + kwh * plan.kwh
+  const monthly = Math.round((plan.fee + kwh * plan.kwh) * 100) / 100
   const subscribed = subscription?.providerId === provider.id
 
   return (
     <div className="rounded-lg border-2 border-ink bg-white p-6">
-      <h2 className="text-xl font-bold">Choose your plan</h2>
+      <h2 className="text-xl font-bold">{t('details.choosePlan')}</h2>
       <fieldset className="mt-5">
-        <legend className="label">Ampere level</legend>
+        <legend className="label">{t('details.ampLevel')}</legend>
         <div className="grid grid-cols-4 gap-2">
           {provider.plans.map((p, i) => (
             <button
@@ -150,7 +150,7 @@ function GeneratorPlans({ provider }) {
 
       <div className="mt-6">
         <label htmlFor="kwh" className="label flex justify-between">
-          <span>Expected use per month</span>
+          <span>{t('details.expectedUse')}</span>
           <span className="font-semibold">{kwh} kWh</span>
         </label>
         <input
@@ -167,41 +167,35 @@ function GeneratorPlans({ provider }) {
 
       <dl className="mt-6 space-y-2 border-t border-line pt-5 text-sm">
         <div className="flex justify-between">
-          <dt className="text-mute">Fixed fee ({plan.amps} A)</dt>
+          <dt className="text-mute">{t('details.fixedFee', { amps: plan.amps })}</dt>
           <dd>{money(plan.fee)}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-mute">{kwh} kWh × {money(plan.kwh)}</dt>
+          <dt className="text-mute" dir="ltr">{kwh} kWh × {money(plan.kwh)}</dt>
           <dd>{money(kwh * plan.kwh)}</dd>
         </div>
         <div className="flex items-baseline justify-between pt-2">
-          <dt className="font-semibold">Estimated monthly bill</dt>
-          <dd className="text-2xl font-extrabold">{money(Math.round(monthly * 100) / 100)}</dd>
+          <dt className="font-semibold">{t('details.estimated')}</dt>
+          <dd className="text-2xl font-extrabold">{money(monthly)}</dd>
         </div>
       </dl>
 
       {subscribed ? (
         <div className="mt-6 rounded-md bg-solar/10 p-4 text-sm">
-          <p className="font-semibold text-[#0b6e67]">You’re subscribed to {subscription.plan}.</p>
+          <p className="font-semibold text-[#0b6e67]">
+            {t('details.subscribedTo', { plan: planLabel(subscription, provider, t) })}
+          </p>
           <Link to="/dashboard" className="mt-1 inline-block font-semibold text-grid hover:underline">
-            Open your dashboard
+            {t('details.openDashboard')}
           </Link>
         </div>
       ) : (
         <button
           type="button"
           className="btn-sun mt-6 w-full"
-          onClick={() =>
-            subscribe({
-              providerId: provider.id,
-              providerName: provider.name,
-              type: 'generator',
-              plan: `${plan.amps} A plan`,
-              monthly: Math.round(monthly * 100) / 100,
-            })
-          }
+          onClick={() => subscribe({ providerId: provider.id, type: 'generator', amps: plan.amps, monthly })}
         >
-          Subscribe to {plan.amps} A
+          {t('details.subscribe', { amps: plan.amps })}
         </button>
       )}
     </div>
@@ -209,6 +203,7 @@ function GeneratorPlans({ provider }) {
 }
 
 function SolarPackages({ provider }) {
+  const { t } = useLang()
   const { subscription, subscribe } = usePower()
   const [index, setIndex] = useState(0)
   const pkg = provider.packages[index]
@@ -216,12 +211,12 @@ function SolarPackages({ provider }) {
 
   return (
     <div className="rounded-lg border-2 border-ink bg-white p-6">
-      <h2 className="text-xl font-bold">Choose a package</h2>
+      <h2 className="text-xl font-bold">{t('details.choosePackage')}</h2>
       <div className="mt-5 space-y-2">
         {provider.packages.map((p, i) => (
           <label
             key={p.name}
-            className={`flex cursor-pointer items-center justify-between rounded-md border p-4 ${
+            className={`flex cursor-pointer items-center justify-between gap-3 rounded-md border p-4 ${
               i === index ? 'border-solar bg-solar/8' : 'border-line hover:border-ink'
             }`}
           >
@@ -235,7 +230,7 @@ function SolarPackages({ provider }) {
               />
               <span>
                 <span className="block font-semibold">{p.name}</span>
-                <span className="text-sm text-mute">{p.kw} kW panels, {p.battery} kWh battery</span>
+                <span className="text-sm text-mute">{t('details.packageSpec', { kw: p.kw, battery: p.battery })}</span>
               </span>
             </span>
             <span className="font-bold">{money(p.price)}</span>
@@ -243,14 +238,16 @@ function SolarPackages({ provider }) {
         ))}
       </div>
       <p className="mt-5 text-sm leading-relaxed text-mute">
-        A {pkg.kw} kW system produces about {Math.round(pkg.kw * 5 * 30)} kWh a month in Lebanese sun.
+        {t('details.produces', { kw: pkg.kw, kwh: Math.round(pkg.kw * 5 * 30) })}
       </p>
 
       {requested ? (
         <div className="mt-6 rounded-md bg-solar/10 p-4 text-sm">
-          <p className="font-semibold text-[#0b6e67]">Site survey requested for the {subscription.plan}.</p>
+          <p className="font-semibold text-[#0b6e67]">
+            {t('details.surveyRequested', { plan: planLabel(subscription, provider, t) })}
+          </p>
           <Link to="/dashboard" className="mt-1 inline-block font-semibold text-grid hover:underline">
-            Open your dashboard
+            {t('details.openDashboard')}
           </Link>
         </div>
       ) : (
@@ -258,17 +255,10 @@ function SolarPackages({ provider }) {
           type="button"
           className="btn-ink mt-6 w-full"
           onClick={() =>
-            subscribe({
-              providerId: provider.id,
-              providerName: provider.name,
-              type: 'solar',
-              plan: `${pkg.name} package`,
-              monthly: 0,
-              price: pkg.price,
-            })
+            subscribe({ providerId: provider.id, type: 'solar', packageIndex: index, monthly: 0, price: pkg.price })
           }
         >
-          Request a free site survey
+          {t('details.requestSurvey')}
         </button>
       )}
     </div>

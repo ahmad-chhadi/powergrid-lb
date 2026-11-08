@@ -1,37 +1,26 @@
 import { useState } from 'react'
 import PageHeader from '../components/PageHeader'
 import Icon from '../components/Icon'
-import { areas } from '../data/areas'
+import { useLang } from '../i18n/LanguageContext'
+import { useData } from '../i18n/useData'
 
 const empty = { name: '', email: '', phone: '', area: '', topic: 'general', message: '' }
+const topics = ['general', 'solar', 'provider', 'business']
 
-const faqs = [
-  {
-    q: 'Is PowerGrid LB a power provider?',
-    a: 'No. We list providers and help you compare them. Your contract and bill stay with the provider you choose.',
-  },
-  {
-    q: 'How accurate is the solar estimate?',
-    a: 'It is a planning figure based on average sun hours. Installers confirm the final size after a site survey.',
-  },
-  {
-    q: 'Can I list my generator network?',
-    a: 'Yes. Choose “List my business” in the form and we will contact you to add your plans and coverage area.',
-  },
-]
-
-// returns an object with an error message for every invalid field
+// returns an object with the translation key of the error for every invalid field
 function validate(v) {
   const errors = {}
-  if (v.name.trim().length < 2) errors.name = 'Enter your full name.'
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) errors.email = 'Enter an email like name@example.com.'
-  if (v.phone && !/^\+?[\d\s-]{7,15}$/.test(v.phone)) errors.phone = 'Enter a phone number with 7 to 15 digits.'
-  if (!v.area) errors.area = 'Choose your area.'
-  if (v.message.trim().length < 10) errors.message = 'Write at least 10 characters so we can help.'
+  if (v.name.trim().length < 2) errors.name = 'contact.errors.name'
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) errors.email = 'contact.errors.email'
+  if (v.phone && !/^\+?[\d\s-]{7,15}$/.test(v.phone)) errors.phone = 'contact.errors.phone'
+  if (!v.area) errors.area = 'contact.errors.area'
+  if (v.message.trim().length < 10) errors.message = 'contact.errors.message'
   return errors
 }
 
 export default function Contact() {
+  const { t } = useLang()
+  const { areas } = useData()
   const [values, setValues] = useState(empty)
   const [errors, setErrors] = useState({})
   const [sent, setSent] = useState(false)
@@ -51,12 +40,12 @@ export default function Contact() {
     }
   }
 
+  // errors are saved as keys, so they switch language together with the page
+  const errorText = (field) => (errors[field] ? t(errors[field]) : null)
+
   return (
     <>
-      <PageHeader
-        title="Contact us"
-        intro="Questions about a provider, a solar estimate or listing your business. We reply within one working day."
-      />
+      <PageHeader title={t('contact.title')} intro={t('contact.intro')} />
 
       <section className="container-page grid gap-10 py-14 lg:grid-cols-[1.4fr_1fr]">
         <div className="rounded-lg border border-line bg-white p-6 sm:p-8">
@@ -65,9 +54,9 @@ export default function Contact() {
               <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-solar text-white">
                 <Icon name="check" className="h-7 w-7" />
               </span>
-              <h2 className="mt-5 text-2xl font-bold">Message sent</h2>
+              <h2 className="mt-5 text-2xl font-bold">{t('contact.sentTitle')}</h2>
               <p className="mt-2 text-mute">
-                Thanks, {values.name.split(' ')[0]}. We’ll reply to {values.email} within one working day.
+                {t('contact.sentText', { name: values.name.split(' ')[0], email: values.email })}
               </p>
               <button
                 type="button"
@@ -77,37 +66,32 @@ export default function Contact() {
                   setSent(false)
                 }}
               >
-                Send another message
+                {t('contact.another')}
               </button>
             </div>
           ) : (
             <form onSubmit={onSubmit} noValidate className="grid gap-5 sm:grid-cols-2">
-              <Field label="Full name" name="name" error={errors.name}>
+              <Field label={t('contact.fullName')} name="name" error={errorText('name')}>
                 <input id="name" name="name" value={values.name} onChange={onChange} className="field" autoComplete="name" />
               </Field>
-              <Field label="Email" name="email" error={errors.email}>
-                <input id="email" name="email" type="email" value={values.email} onChange={onChange} className="field" autoComplete="email" />
+              <Field label={t('contact.email')} name="email" error={errorText('email')}>
+                <input id="email" name="email" type="email" dir="ltr" value={values.email} onChange={onChange} className="field" autoComplete="email" />
               </Field>
-              <Field label="Phone (optional)" name="phone" error={errors.phone}>
-                <input id="phone" name="phone" type="tel" value={values.phone} onChange={onChange} className="field" placeholder="+961 70 000 000" autoComplete="tel" />
+              <Field label={t('contact.phone')} name="phone" error={errorText('phone')}>
+                <input id="phone" name="phone" type="tel" dir="ltr" value={values.phone} onChange={onChange} className="field" placeholder={t('contact.phonePlaceholder')} autoComplete="tel" />
               </Field>
-              <Field label="Area" name="area" error={errors.area}>
+              <Field label={t('contact.area')} name="area" error={errorText('area')}>
                 <select id="area" name="area" value={values.area} onChange={onChange} className="field">
-                  <option value="">Choose your area</option>
+                  <option value="">{t('contact.chooseArea')}</option>
                   {areas.map((a) => (
                     <option key={a.id} value={a.id}>{a.name}</option>
                   ))}
                 </select>
               </Field>
               <fieldset className="sm:col-span-2">
-                <legend className="label">Topic</legend>
+                <legend className="label">{t('contact.topic')}</legend>
                 <div className="flex flex-wrap gap-2">
-                  {[
-                    ['general', 'General question'],
-                    ['solar', 'Solar estimate'],
-                    ['provider', 'Problem with a provider'],
-                    ['business', 'List my business'],
-                  ].map(([value, label]) => (
+                  {topics.map((value) => (
                     <label
                       key={value}
                       className={`cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium ${
@@ -115,20 +99,20 @@ export default function Contact() {
                       }`}
                     >
                       <input type="radio" name="topic" value={value} checked={values.topic === value} onChange={onChange} className="sr-only" />
-                      {label}
+                      {t(`contact.topics.${value}`)}
                     </label>
                   ))}
                 </div>
               </fieldset>
               <div className="sm:col-span-2">
-                <Field label="Message" name="message" error={errors.message}>
+                <Field label={t('contact.message')} name="message" error={errorText('message')}>
                   <textarea id="message" name="message" rows="5" value={values.message} onChange={onChange} className="field resize-y" />
                 </Field>
               </div>
               <div className="sm:col-span-2">
                 <button type="submit" className="btn-sun w-full sm:w-auto">
                   <Icon name="mail" className="h-4 w-4" />
-                  Send message
+                  {t('contact.send')}
                 </button>
               </div>
             </form>
@@ -139,7 +123,7 @@ export default function Contact() {
           <div className="space-y-4 rounded-lg bg-night p-6 text-white">
             <p className="flex items-start gap-3">
               <Icon name="pin" className="mt-0.5 h-5 w-5 shrink-0 text-sun" />
-              <span>LIU Nabatieh Campus, Nabatieh, Lebanon</span>
+              <span>{t('contact.address')}</span>
             </p>
             <p className="flex items-center gap-3">
               <Icon name="mail" className="h-5 w-5 shrink-0 text-sun" />
@@ -147,14 +131,14 @@ export default function Contact() {
             </p>
             <p className="flex items-center gap-3">
               <Icon name="clock" className="h-5 w-5 shrink-0 text-sun" />
-              <span>Monday to Friday, 9:00 to 17:00</span>
+              <span>{t('contact.hours')}</span>
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-bold">Common questions</h2>
+            <h2 className="text-xl font-bold">{t('contact.faqTitle')}</h2>
             <div className="mt-4 divide-y divide-line rounded-lg border border-line bg-white">
-              {faqs.map((f) => (
+              {t('contact.faqs').map((f) => (
                 <details key={f.q} className="group p-4">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-semibold">
                     {f.q}
