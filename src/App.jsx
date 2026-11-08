@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
+import Home from './pages/Home'
 
 export default function App() {
   return (
@@ -10,7 +11,7 @@ export default function App() {
       <Navbar />
       <main className="flex-1">
         <Routes>
-          <Route path="*" element={<h1 className="container-page py-20 text-4xl font-extrabold">PowerGrid LB</h1>} />
+<Route path="/" element={<Home />} />
         </Routes>
       </main>
       <Footer />
