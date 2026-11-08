@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* Design tokens: colours come from the three power sources a Lebanese home lives with */
+@theme {
+  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+
+  --color-night: #0f1c2e;
+  --color-night-2: #182a42;
+  --color-paper: #f4f6f8;
+  --color-ink: #172033;
+  --color-mute: #5b6577;
+  --color-line: #dde2e9;
+
+  --color-grid: #2f6feb;   /* state grid (EDL) */
+  --color-gen: #e8a33d;    /* neighbourhood generator */
+  --color-solar: #13a89e;  /* solar panels */
+  --color-cut: #d64545;    /* outage */
+  --color-sun: #f2b705;    /* brand highlight */
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    font-feature-settings: "tnum" 1;
+  }
+  h1, h2, h3 {
+    font-stretch: 112%;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-sun);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* Reusable classes (Tailwind v4 custom utilities) */
+@utility container-page {
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-semibold transition-colors;
+}
+@utility btn-sun {
+  @apply btn bg-sun text-night hover:bg-[#ffc81f];
+}
+@utility btn-ink {
+  @apply btn bg-ink text-white hover:bg-night-2;
+}
+@utility btn-ghost {
+  @apply btn border border-line bg-white text-ink hover:border-ink;
+}
+@utility field {
+  @apply w-full rounded-md border border-line bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-mute/70 focus:border-grid focus:outline-none focus:ring-2 focus:ring-grid/20;
+}
+@utility label {
+  @apply mb-1.5 block text-sm font-medium text-ink;
+}
+/* hatched pattern used for outage hours */
+@utility hatch {
+  background-image: repeating-linear-gradient(135deg, rgba(214, 69, 69, 0.55) 0 2px, transparent 2px 6px);
+}
+
+/* The one orchestrated motion: hour cells of the supply strip switching on */
+@keyframes switch-on {
+  from { opacity: 0; transform: scaleY(0.2); }
+  to { opacity: 1; transform: scaleY(1); }
+}
+.cell-on {
+  animation: switch-on 420ms cubic-bezier(.2,.8,.2,1) both;
+  transform-origin: bottom;
+}
+@keyframes pulse-now {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.now-dot {
+  animation: pulse-now 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cell-on, .now-dot { animation: none; }
+  html { scroll-behavior: auto; }
+}
