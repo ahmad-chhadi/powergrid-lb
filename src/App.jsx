@@ -7,6 +7,8 @@ import Providers from './pages/Providers'
 import ProviderDetails from './pages/ProviderDetails'
 import Services from './pages/Services'
 import Dashboard from './pages/Dashboard'
+import About from './pages/About'
+import Contact from './pages/Contact'
 
 export default function App() {
   return (
@@ -20,6 +22,8 @@ export default function App() {
 <Route path="/providers/:id" element={<ProviderDetails />} />
 <Route path="/services" element={<Services />} />
 <Route path="/dashboard" element={<Dashboard />} />
+<Route path="/about" element={<About />} />
+<Route path="/contact" element={<Contact />} />
         </Routes>
       </main>
       <Footer />
