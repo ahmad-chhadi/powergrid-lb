@@ -1,0 +1,200 @@
+// Sample providers for demonstration purposes. Prices are in USD.
+// Generator plans: a fixed monthly fee per ampere level plus a price per kWh.
+// Solar installers: complete packages with a one-time price.
+
+export const providers = [
+  {
+    id: 'kassem-generators',
+    name: 'Kassem Generators',
+    type: 'generator',
+    area: 'nabatieh',
+    rating: 4.7,
+    since: 2012,
+    hoursPerDay: 22,
+    phone: '+961 7 123 456',
+    summary: 'Two 500 kVA units serving the Nabatieh market area with an on-call technician.',
+    features: ['Smart meter on every line', 'Maintenance window announced on WhatsApp', 'Technician on call 24/7'],
+    plans: [
+      { amps: 5, fee: 18, kwh: 0.42 },
+      { amps: 10, fee: 30, kwh: 0.42 },
+      { amps: 15, fee: 42, kwh: 0.41 },
+      { amps: 20, fee: 55, kwh: 0.40 },
+    ],
+    reviews: [
+      { name: 'Hussein M.', rating: 5, text: 'Meter readings match my own app. No surprises on the bill.' },
+      { name: 'Rana K.', rating: 4, text: 'Good service, the evening maintenance gap is a bit long.' },
+    ],
+  },
+  {
+    id: 'south-light',
+    name: 'South Light Power',
+    type: 'generator',
+    area: 'nabatieh',
+    rating: 4.2,
+    since: 2016,
+    hoursPerDay: 20,
+    phone: '+961 3 554 210',
+    summary: 'Neighbourhood generator covering Kfarjoz and the university road.',
+    features: ['Monthly printed bill', 'Pay by OMT or Whish', 'Free amp upgrade once a year'],
+    plans: [
+      { amps: 5, fee: 15, kwh: 0.45 },
+      { amps: 10, fee: 27, kwh: 0.45 },
+      { amps: 15, fee: 39, kwh: 0.44 },
+    ],
+    reviews: [
+      { name: 'Ali S.', rating: 4, text: 'Cheap fixed fee, kWh price is a little higher than others.' },
+      { name: 'Maya H.', rating: 4, text: 'They answer quickly when the line trips.' },
+    ],
+  },
+  {
+    id: 'cedars-energy',
+    name: 'Cedars Energy',
+    type: 'generator',
+    area: 'beirut',
+    rating: 4.5,
+    since: 2009,
+    hoursPerDay: 24,
+    phone: '+961 1 345 678',
+    summary: 'Covers Achrafieh and Mar Mikhael with backup units for 24-hour supply.',
+    features: ['24-hour coverage', 'Online bill history', 'Automatic switch-over to grid'],
+    plans: [
+      { amps: 5, fee: 22, kwh: 0.44 },
+      { amps: 10, fee: 36, kwh: 0.43 },
+      { amps: 20, fee: 64, kwh: 0.42 },
+    ],
+    reviews: [
+      { name: 'Joelle A.', rating: 5, text: 'Never had a full cut in two years.' },
+      { name: 'Karim T.', rating: 4, text: 'More expensive, but the supply is reliable.' },
+    ],
+  },
+  {
+    id: 'saida-power',
+    name: 'Saida Power Hub',
+    type: 'generator',
+    area: 'saida',
+    rating: 3.9,
+    since: 2014,
+    hoursPerDay: 21,
+    phone: '+961 7 720 118',
+    summary: 'Serves the old city and the coastal road neighbourhoods.',
+    features: ['Fixed monthly fee option', 'Bills in USD or LBP'],
+    plans: [
+      { amps: 5, fee: 16, kwh: 0.43 },
+      { amps: 10, fee: 28, kwh: 0.43 },
+    ],
+    reviews: [
+      { name: 'Omar D.', rating: 4, text: 'Fair price for the area.' },
+      { name: 'Nour F.', rating: 3, text: 'Voltage drops in the evening peak.' },
+    ],
+  },
+  {
+    id: 'tyre-coast',
+    name: 'Tyre Coast Generators',
+    type: 'generator',
+    area: 'tyre',
+    rating: 4.4,
+    since: 2011,
+    hoursPerDay: 22,
+    phone: '+961 7 349 902',
+    summary: 'Family-run network covering the Tyre coast and Al Bass.',
+    features: ['Meter photo sent with every bill', 'Senior discount'],
+    plans: [
+      { amps: 5, fee: 17, kwh: 0.41 },
+      { amps: 10, fee: 29, kwh: 0.41 },
+      { amps: 15, fee: 40, kwh: 0.40 },
+    ],
+    reviews: [
+      { name: 'Fatima Z.', rating: 5, text: 'Very honest people, quick to fix problems.' },
+      { name: 'Samir B.', rating: 4, text: 'Good value.' },
+    ],
+  },
+  {
+    id: 'north-volt',
+    name: 'North Volt',
+    type: 'generator',
+    area: 'tripoli',
+    rating: 4.0,
+    since: 2015,
+    hoursPerDay: 23,
+    phone: '+961 6 411 300',
+    summary: 'Large network across Tripoli with prepaid card plans.',
+    features: ['Prepaid kWh cards', 'SMS alert before cuts'],
+    plans: [
+      { amps: 5, fee: 14, kwh: 0.46 },
+      { amps: 10, fee: 26, kwh: 0.45 },
+      { amps: 15, fee: 37, kwh: 0.45 },
+    ],
+    reviews: [
+      { name: 'Lina R.', rating: 4, text: 'The SMS alerts are useful.' },
+      { name: 'Ziad K.', rating: 4, text: 'Prepaid cards help me control the bill.' },
+    ],
+  },
+  {
+    id: 'sunpeak-solar',
+    name: 'SunPeak Solar',
+    type: 'solar',
+    area: 'nabatieh',
+    rating: 4.8,
+    since: 2019,
+    hoursPerDay: 9,
+    phone: '+961 3 908 771',
+    summary: 'Design and installation of hybrid solar systems with lithium batteries.',
+    features: ['5-year installation warranty', 'Free site survey', 'Monitoring app included'],
+    packages: [
+      { name: 'Starter', kw: 2.2, battery: 5, price: 2400 },
+      { name: 'Home', kw: 4.4, battery: 10, price: 4300 },
+      { name: 'Home Plus', kw: 6.6, battery: 15, price: 6200 },
+    ],
+    reviews: [
+      { name: 'Bilal A.', rating: 5, text: 'Our generator bill dropped to almost nothing in summer.' },
+      { name: 'Dana S.', rating: 5, text: 'Clean installation and clear explanation of the inverter.' },
+    ],
+  },
+  {
+    id: 'bekaa-sun',
+    name: 'Bekaa Sun Systems',
+    type: 'solar',
+    area: 'zahle',
+    rating: 4.6,
+    since: 2018,
+    hoursPerDay: 10,
+    phone: '+961 8 812 045',
+    summary: 'Solar for homes and farms, including water pumping systems.',
+    features: ['Farm pump systems', 'Installment plans over 12 months'],
+    packages: [
+      { name: 'Starter', kw: 3.3, battery: 5, price: 2900 },
+      { name: 'Home', kw: 5.5, battery: 10, price: 4800 },
+      { name: 'Farm', kw: 11, battery: 20, price: 9800 },
+    ],
+    reviews: [
+      { name: 'Elie N.', rating: 5, text: 'Installment plan made it possible for us.' },
+      { name: 'Rita M.', rating: 4, text: 'Took two weeks to get the batteries, otherwise great.' },
+    ],
+  },
+  {
+    id: 'capital-solar',
+    name: 'Capital Solar',
+    type: 'solar',
+    area: 'beirut',
+    rating: 4.3,
+    since: 2020,
+    hoursPerDay: 8,
+    phone: '+961 1 220 990',
+    summary: 'Rooftop systems for apartment buildings with shared roof space.',
+    features: ['Building-share agreements', 'Remote monitoring'],
+    packages: [
+      { name: 'Apartment', kw: 1.65, battery: 5, price: 2100 },
+      { name: 'Home', kw: 3.3, battery: 10, price: 3900 },
+    ],
+    reviews: [
+      { name: 'Sara H.', rating: 4, text: 'They handled the agreement with our building committee.' },
+      { name: 'Tony G.', rating: 5, text: 'Battery covers the whole night for our fridge and router.' },
+    ],
+  },
+]
+
+export const getProvider = (id) => providers.find((p) => p.id === id)
+
+// lowest monthly starting price, used for sorting and cards
+export const startingPrice = (p) =>
+  p.type === 'generator' ? Math.min(...p.plans.map((x) => x.fee)) : Math.min(...p.packages.map((x) => x.price))
