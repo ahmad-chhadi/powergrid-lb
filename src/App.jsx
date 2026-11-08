@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import Providers from './pages/Providers'
 import ProviderDetails from './pages/ProviderDetails'
 import Services from './pages/Services'
+import Dashboard from './pages/Dashboard'
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
 <Route path="/providers" element={<Providers />} />
 <Route path="/providers/:id" element={<ProviderDetails />} />
 <Route path="/services" element={<Services />} />
+<Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </main>
       <Footer />
