@@ -86,6 +86,10 @@ src/
 |---|---|
 | ![Arabic home](docs/screenshots/home-arabic.png) | ![Arabic provider page on mobile](docs/screenshots/mobile-arabic.png) |
 
+## Project report
+
+The Phase 1 report (PDF) is in [docs/PowerGrid_LB_Report.pdf](docs/PowerGrid_LB_Report.pdf).
+
 ## Credits
 
 The design, icons and charts were made for this project; no UI template was used.
