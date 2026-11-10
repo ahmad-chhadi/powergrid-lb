@@ -3,6 +3,7 @@ import PageHeader from '../components/PageHeader'
 import Icon from '../components/Icon'
 import { useLang } from '../i18n/LanguageContext'
 import { useData } from '../i18n/useData'
+import { usePageTitle } from '../utils/usePageTitle'
 
 const empty = { name: '', email: '', phone: '', area: '', topic: 'general', message: '' }
 const topics = ['general', 'solar', 'provider', 'business']
@@ -20,6 +21,7 @@ function validate(v) {
 
 export default function Contact() {
   const { t } = useLang()
+  usePageTitle(t('nav.contact'))
   const { areas } = useData()
   const [values, setValues] = useState(empty)
   const [errors, setErrors] = useState({})

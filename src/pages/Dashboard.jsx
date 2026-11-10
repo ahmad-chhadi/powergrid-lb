@@ -7,9 +7,11 @@ import { money } from '../utils/schedule'
 import { usePower } from '../context/PowerContext'
 import { useLang } from '../i18n/LanguageContext'
 import { useData, planLabel } from '../i18n/useData'
+import { usePageTitle } from '../utils/usePageTitle'
 
 export default function Dashboard() {
   const { t } = useLang()
+  usePageTitle(t('nav.dashboard'))
   const { areas, getArea, getProvider } = useData()
   const { areaId, setArea, subscription, cancel } = usePower()
   const area = getArea(areaId) ?? areas[0]
@@ -150,7 +152,7 @@ export default function Dashboard() {
                     <td className="px-5 py-4 font-medium sm:px-6">{b.id}</td>
                     <td className="px-5 py-4">{billMonth(b.month)}</td>
                     <td className="px-5 py-4 text-end">{b.kwh}</td>
-                    <td className="px-5 py-4 text-end font-semibold">{money(b.amount)}</td>
+                    <td className="px-5 py-4 text-end font-semibold">{money(b.amount, 2)}</td>
                     <td className="px-5 py-4 sm:px-6">
                       <span
                         className={`rounded-full px-2.5 py-1 text-xs font-semibold ${

@@ -4,8 +4,9 @@ import PageHeader from '../components/PageHeader'
 import SolarCalculator from '../components/SolarCalculator'
 import Icon from '../components/Icon'
 import { useLang } from '../i18n/LanguageContext'
+import { usePageTitle } from '../utils/usePageTitle'
 
-// icon and colour for each service card; the text comes from translations.js
+// icon and colour for each service card; the text comes from en.js / ar.js
 const serviceStyles = [
   { icon: 'plug', color: 'bg-gen' },
   { icon: 'sun', color: 'bg-solar' },
@@ -23,6 +24,7 @@ const ampLevels = [
 
 export default function Services() {
   const { t } = useLang()
+  usePageTitle(t('nav.services'))
   const { hash } = useLocation()
   const services = t('services.items')
   const ampRuns = t('services.ampRuns')

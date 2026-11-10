@@ -2,9 +2,11 @@ import { Link } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import SupplyStrip from '../components/SupplyStrip'
 import { useLang } from '../i18n/LanguageContext'
+import { usePageTitle } from '../utils/usePageTitle'
 
 export default function About() {
   const { t, lang } = useLang()
+  usePageTitle(t('nav.about'))
   const values = t('about.values')
   const timeline = t('about.timeline')
 

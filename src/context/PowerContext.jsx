@@ -8,7 +8,12 @@ const STORAGE_KEY = 'powergrid-lb'
 function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY))
-    if (saved) return saved
+    if (saved) {
+      // drop a subscription saved by an older version of the site (it had no amps or package number)
+      const sub = saved.subscription
+      if (sub && sub.amps == null && sub.packageIndex == null) saved.subscription = null
+      return saved
+    }
   } catch {
     /* storage unavailable: fall back to defaults */
   }

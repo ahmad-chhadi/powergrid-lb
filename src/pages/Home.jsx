@@ -7,6 +7,7 @@ import { hourLabel, nextChange } from '../utils/schedule'
 import { usePower } from '../context/PowerContext'
 import { useLang } from '../i18n/LanguageContext'
 import { useData } from '../i18n/useData'
+import { usePageTitle } from '../utils/usePageTitle'
 
 // current hour, refreshed every minute
 function useCurrentHour() {
@@ -18,7 +19,7 @@ function useCurrentHour() {
   return hour
 }
 
-// icons and links for the three feature columns; their text lives in translations.js
+// icons and links for the three feature columns; their text lives in en.js / ar.js
 const featureLinks = [
   { icon: 'plug', to: '/providers' },
   { icon: 'sun', to: '/services#calculator' },
@@ -27,6 +28,7 @@ const featureLinks = [
 
 export default function Home() {
   const { t } = useLang()
+  usePageTitle('')
   const { areas, providers, getArea, source } = useData()
   const { areaId, setArea } = usePower()
   const area = getArea(areaId) ?? areas[0]

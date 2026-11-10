@@ -8,7 +8,8 @@ generator subscription for the rest of the day, and increasingly solar panels. P
 together: it shows today's supply hours for each area, compares generator plans and solar installers,
 estimates the solar system a home needs, and tracks consumption and bills in a dashboard.
 
-Live site: https://powergrid-lb.vercel.app (replace with your Vercel link)
+**Live site:** https://powergrid-lb.vercel.app  
+**Repository:** https://github.com/ahmad-chhadi/powergrid-lb
 
 > Phase 1 is front end only. Providers, schedules and bills are sample data stored in JavaScript files.
 
@@ -68,7 +69,7 @@ src/
   data/         Sample data: areas and schedules, providers, household usage
   i18n/         Language support: translations (en.js, ar.js), Arabic data, useData hook
   pages/        One file per route
-  utils/        Schedule and money helpers
+  utils/        Schedule and money helpers, page title hook
 ```
 
 ## Screenshots

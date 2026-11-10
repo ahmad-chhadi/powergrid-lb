@@ -6,6 +6,7 @@ import Icon from '../components/Icon'
 import { startingPrice } from '../data/providers'
 import { useLang } from '../i18n/LanguageContext'
 import { useData } from '../i18n/useData'
+import { usePageTitle } from '../utils/usePageTitle'
 
 const types = ['all', 'generator', 'solar']
 
@@ -18,6 +19,7 @@ const sorts = {
 export default function Providers() {
   const { t } = useLang()
   const { areas, providers } = useData()
+  usePageTitle(t('nav.providers'))
 
   // Filters live in the URL (?q=&area=&type=&sort=) so a filtered list can be shared or bookmarked.
   const [params, setParams] = useSearchParams()

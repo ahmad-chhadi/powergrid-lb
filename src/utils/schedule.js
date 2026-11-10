@@ -6,18 +6,6 @@ export function countHours(schedule) {
   return totals
 }
 
-// Groups consecutive hours with the same source: "EEGG" -> [{source:'E',from:0,to:2}, ...]
-export function toBlocks(schedule) {
-  const blocks = []
-  for (let h = 0; h < schedule.length; h++) {
-    const s = schedule[h]
-    const last = blocks[blocks.length - 1]
-    if (last && last.source === s) last.to = h + 1
-    else blocks.push({ source: s, from: h, to: h + 1 })
-  }
-  return blocks
-}
-
 export const hourLabel = (h) => `${String(h % 24).padStart(2, '0')}:00`
 
 // Next hour (from `now`) at which the source changes
@@ -30,5 +18,11 @@ export function nextChange(schedule, now) {
   return null
 }
 
-export const money = (n) =>
-  n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: n % 1 ? 2 : 0 })
+// money(18) -> "$18", money(9.5) -> "$9.50", money(93, 2) -> "$93.00" (fixed decimals for tables)
+export const money = (n, decimals = n % 1 ? 2 : 0) =>
+  n.toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  })

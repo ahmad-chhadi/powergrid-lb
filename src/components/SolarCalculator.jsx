@@ -3,7 +3,7 @@ import { money } from '../utils/schedule'
 import { useLang } from '../i18n/LanguageContext'
 
 // Typical household appliances: power in watts and default hours of use per day.
-// Their names come from translations.js (calc.appliances.<id>).
+// Their names come from en.js / ar.js (calc.appliances.<id>).
 const APPLIANCES = [
   { id: 'fridge', watts: 150, hours: 24, on: true },
   { id: 'lights', watts: 80, hours: 6, on: true },

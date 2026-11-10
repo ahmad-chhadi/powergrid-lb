@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import SupplyStrip from '../components/SupplyStrip'
 import { useLang } from '../i18n/LanguageContext'
+import { usePageTitle } from '../utils/usePageTitle'
 
 export default function NotFound() {
   const { t } = useLang()
+  usePageTitle('404')
   return (
     <section className="container-page py-24">
       <div className="mx-auto max-w-xl text-center">

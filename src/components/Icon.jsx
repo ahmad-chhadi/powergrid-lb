@@ -1,6 +1,5 @@
 // Small inline icon set (stroke icons, 24x24 grid) so the project needs no icon library.
 const paths = {
-  bolt: <path d="M13 2 4 14h7l-1 8 9-12h-7z" />,
   sun: (
     <>
       <circle cx="12" cy="12" r="4" />
@@ -8,7 +7,6 @@ const paths = {
     </>
   ),
   plug: <path d="M9 2v6M15 2v6M6 8h12v3a6 6 0 0 1-12 0zM12 17v5" />,
-  grid: <path d="M12 2 5 22M12 2l7 20M7.5 15h9M9 10h6M4 6h16" />,
   gauge: <path d="M4 18a8 8 0 1 1 16 0M12 18l4-6" />,
   menu: <path d="M4 7h16M4 12h16M4 17h16" />,
   close: <path d="M6 6l12 12M18 6 6 18" />,
@@ -38,12 +36,6 @@ const paths = {
     <>
       <circle cx="12" cy="12" r="9" />
       <path d="M12 7v5l3 2" />
-    </>
-  ),
-  battery: (
-    <>
-      <rect x="2" y="7" width="17" height="10" rx="2" />
-      <path d="M22 11v2M6 10v4M10 10v4" />
     </>
   ),
   receipt: <path d="M6 2h12v20l-3-2-3 2-3-2-3 2zM9 7h6M9 11h6M9 15h4" />,

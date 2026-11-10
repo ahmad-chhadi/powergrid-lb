@@ -7,6 +7,7 @@ import { money } from '../utils/schedule'
 import { usePower } from '../context/PowerContext'
 import { useLang } from '../i18n/LanguageContext'
 import { useData, planLabel } from '../i18n/useData'
+import { usePageTitle } from '../utils/usePageTitle'
 
 export default function ProviderDetails() {
   const { t } = useLang()
@@ -15,6 +16,7 @@ export default function ProviderDetails() {
   // the :id part of the URL decides which provider is shown
   const { id } = useParams()
   const provider = getProvider(id)
+  usePageTitle(provider ? provider.name : t('details.notListedTitle'))
 
   if (!provider) {
     return (
